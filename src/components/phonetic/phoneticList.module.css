@@ -1,0 +1,7 @@
+.audioList {
+    display: flex;
+    justify-content: flex-start;
+    list-style-type: none;
+    padding-left: 0;
+    flex-wrap: wrap;
+}
