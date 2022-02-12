@@ -2,7 +2,7 @@
   "name": "dictionapp",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://gitname.github.io/vocabApp",
+  "homepage": "https://aditya-padhi-kbl.github.io/vocabApp",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@reduxjs/toolkit": "^1.4.0",
