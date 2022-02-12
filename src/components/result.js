@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import {getSearchedWord, getSearchedWordMeaning, getSynonyms} from "../features/dictionaryWord";
+import {getSearchedWord, getSearchedWordMeaning, getSynonyms, resetWord} from "../features/dictionaryWord";
 import {useEffect, useRef, useState} from "react";
 import {Button, Divider, Input, List, message, Modal} from "antd";
 import React from "react";
@@ -38,14 +38,15 @@ const Result = () => {
             dispatch(resetCumulativeScore())
         }
     }
+
    return <>
        <Modal
            width={800}
            title={modalDisplayMode === 0 ? <section>The random word is  <Text>{typedWord}</Text></section>: null}
         destroyOnClose={true}
         visible={showModal}
-        onOk={() => setShowModal(false)}
-        onClose={() => setShowModal(false)}>
+        onOk={() => setShowModal(false) && dispatch(resetWord())}
+        onClose={() => setShowModal(false) && dispatch(resetWord())}>
 
            {(modalDisplayMode === 0) ? <Input.Group compact>
                <Input style={{ width: 'calc(100% - 200px)' }} placeholder={`Enter a synonym for ${typedWord}`} ref = {synonymRef}/>

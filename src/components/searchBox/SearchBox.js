@@ -16,12 +16,12 @@ function SearchBox() {
     const dispatch = useDispatch();
     const cachedWordList = useSelector(getWordList);
     const cumulativeScore = useSelector(getCumulativeScore);
-    const onSearch = (event) => {
+
+    const onSearch = (event = "hello") => {
         dispatch(resetWord());
-        let clickedWord = event || "hello";
         dispatch(setModalDisplayMode(1));
-        dispatch(setWord(clickedWord))
-        dispatch(getWordMeaning(clickedWord))
+        dispatch(setWord(event))
+        dispatch(getWordMeaning(event))
     }
 
     function randomWordPicker() {
@@ -52,7 +52,7 @@ function SearchBox() {
     <>
         <Input.Group>
             <Search
-                placeholder="Search a word"
+                placeholder='Search for a word like "hello"'
                 allowClear
                 enterButton
                 style={{ width: "50%" }}
@@ -60,7 +60,7 @@ function SearchBox() {
             />
             <Button onClick={randomWordPicker} disabled={cachedWordList.length === 0} style = {{marginLeft: '2px'}}>Guess</Button>
         </Input.Group>
-        <Divider>
+        <Divider orientation="left" plain orientationMargin={0}>
             <Text strong>Your Cumulative Score <Badge count={cumulativeScore} /></Text>
         </Divider>
     </>

@@ -19,22 +19,22 @@ const MeaningComponent = (props) => {
             <section><Text strong>Example</Text> <span>{example}</span></section>
             {modalDisplayMode ? <>{synonyms.length > 0 ? <>
                     <section>Synonyms</section>
-                    <div>
+                    <section>
                         {
                             synonyms.map((synonym, index) => <Tag key={index} color="#5ba9a9" style={{marginBottom: '1px'}}>{synonym}</Tag>)
                         }
-                    </div>
+                    </section>
                 </>: null}
                     {antonyms.length > 0 ? <>
                         <section>Antonyms</section>
-                        <div>
+                        <section>
                             {
                                 antonyms.map(
                                     (antonym, index) =>
                                         <Tag key={index} color="#6495ed" style={{marginBottom: '1px'}}>{antonym}</Tag>
                                 )
                             }
-                        </div>
+                        </section>
                     </>: null}</>: null}
 
         </Space>

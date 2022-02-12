@@ -9,9 +9,7 @@ const AudioComponent = ({text, audio}) => {
     }
     return (
         <>
-            <>
-                <AudioOutlined onClick={audioClicked}/> <span>{text}</span>
-            </>
+            <AudioOutlined onClick={audioClicked}/> <span>{text}</span>
             {audio ? <audio
                 ref={audioRef}
                 style={{display: "none"}}
