@@ -39,7 +39,6 @@ export const dictionaryWord = createSlice({
 
 export const getWordMeaning = createAsyncThunk('dictWord/getWordMeaning', async (word, thunkAPI) => {
     try {
-        debugger
         let list = await fetchWordMeaning(word);
         if (!list.fromCache) {
             if (list?.result?.length > 0) {
