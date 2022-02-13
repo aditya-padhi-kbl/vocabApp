@@ -2,7 +2,7 @@ import './SearchBox.css';
 import {useDispatch, useSelector} from "react-redux";
 import Text from "antd/es/typography/Text";
 
-import {getWordMeaning, resetWord, setWord} from "../../features/dictionaryWord";
+import {getWordFetchState, getWordMeaning, resetWord, setWord} from "../../features/dictionaryWord";
 import {Button, Input, Badge, Divider} from "antd";
 import {useEffect} from "react";
 import {getWordList, updateMeaningList, updateWordList} from "../../features/dictionaryWordList";
@@ -16,21 +16,24 @@ function SearchBox() {
     const dispatch = useDispatch();
     const cachedWordList = useSelector(getWordList);
     const cumulativeScore = useSelector(getCumulativeScore);
+    const searchState = useSelector(getWordFetchState);
 
-    const onSearch = (event = "hello") => {
+    function manageWordProcess(word, displayMode) {
         dispatch(resetWord());
-        dispatch(setModalDisplayMode(1));
-        dispatch(setWord(event))
-        dispatch(getWordMeaning(event))
+        dispatch(setModalDisplayMode(displayMode));
+        dispatch(setWord(word))
+        dispatch(getWordMeaning(word))
+    }
+    const onSearch = (value = "hello") => {
+        if (value.length > 0) {
+            manageWordProcess(value, 1);
+        }
     }
 
     function randomWordPicker() {
         let randomIdx = getRandomValue(0, cachedWordList.length);
         let word = cachedWordList[randomIdx];
-        dispatch(setModalDisplayMode(0));
-        dispatch(resetWord());
-        dispatch(setWord(word?.word))
-        dispatch(getWordMeaning(word?.word))
+        manageWordProcess(word?.word, 0);
     }
 
 
@@ -55,10 +58,11 @@ function SearchBox() {
                 placeholder='Search for a word like "hello"'
                 allowClear
                 enterButton
-                style={{ width: "50%" }}
+                style={{ width: "80%" }}
                 onSearch={onSearch}
+                loading={searchState !== "idle"}
             />
-            <Button onClick={randomWordPicker} disabled={cachedWordList.length === 0} style = {{marginLeft: '2px'}}>Guess</Button>
+            <Button onClick={randomWordPicker} disabled={(cachedWordList.length === 0) || (searchState !== "idle")} style = {{marginLeft: '2px'}} loading={searchState !== "idle"}>Guess</Button>
         </Input.Group>
         <Divider orientation="left" plain orientationMargin={0}>
             <Text strong>Your Cumulative Score <Badge count={cumulativeScore} /></Text>

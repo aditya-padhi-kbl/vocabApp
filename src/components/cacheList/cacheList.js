@@ -1,12 +1,13 @@
+import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getWordList} from "../../features/dictionaryWordList";
-import {List} from "antd";
+import {List, Input, Divider} from "antd";
 import styles from "./cacheList.module.css"
 import {useEffect, useState} from "react";
-import {getSearchedWord, getWordMeaning, resetWord, setWord} from "../../features/dictionaryWord";
+import {getWordMeaning, resetWord, setWord} from "../../features/dictionaryWord";
 import {setModalDisplayMode} from "../../features/modalDisplayMode";
 import Text from "antd/es/typography/Text";
-
+const {Search} = Input;
 const sortArrayOfObject = (arrayList = [], sort = "asc") => {
     return JSON.parse(JSON.stringify(arrayList)).sort((a, b) => {
         return (sort === "asc") && a?.word?.localeCompare(b?.word)
@@ -16,11 +17,10 @@ const CACHE_LIST = ({sortMode = "asc"}) => {
     const wordSearchList = useSelector(getWordList);
     const dispatch = useDispatch();
     const sortedWordList = sortArrayOfObject(wordSearchList, sortMode);
-    const searchedWord = useSelector(getSearchedWord);
     const [filteredList, setFilteredList] = useState([]);
     useEffect(() => {
         setFilteredList(JSON.parse(JSON.stringify(sortedWordList)))
-    }, [searchedWord, wordSearchList.length])
+    }, [sortedWordList.length])
 
     const wordClickHandler = clickedWord => {
         dispatch(resetWord());
@@ -28,9 +28,24 @@ const CACHE_LIST = ({sortMode = "asc"}) => {
         dispatch(setWord(clickedWord))
         dispatch(getWordMeaning(clickedWord))
     }
+
+    const onSearch = value => {
+        if (value.length > 0) {
+            setFilteredList(sortedWordList.filter(item => item?.word.toLowerCase() === value.toLowerCase()));
+        } else {
+            setFilteredList(JSON.parse(JSON.stringify(sortedWordList)))
+        }
+    }
     return (
         <>
-            <Text>Your visited Words:-</Text>
+            <Text>Recently Searched Words </Text>
+            <Search
+                placeholder='Search for a word like "hello"'
+                allowClear
+                enterButton
+                onSearch={onSearch}
+            />
+            <Divider />
             <div className={styles.scrollableDiv}>
                 <List
                     dataSource = {filteredList}
@@ -52,4 +67,4 @@ const CACHE_LIST = ({sortMode = "asc"}) => {
     )
 }
 
-export default CACHE_LIST;
+export default React.memo(CACHE_LIST);

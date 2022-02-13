@@ -23,7 +23,7 @@ const Result = () => {
     }, [typedWord, typedWordMeaning.length]);
 
     const checkSynonymHandler = () => {
-        if (synonymList.includes(synonymRef?.current?.state?.value)) {
+        if (synonymList.filter(synonym => synonym.toLowerCase() === synonymRef?.current?.state?.value?.toLowerCase()).length) {
             message.success({
                 icon: <></>,
                 content: 'You guessed it right! 🙌'
@@ -46,7 +46,7 @@ const Result = () => {
         destroyOnClose={true}
         visible={showModal}
         onOk={() => setShowModal(false) && dispatch(resetWord())}
-        onClose={() => setShowModal(false) && dispatch(resetWord())}>
+        onCancel={() => setShowModal(false) && dispatch(resetWord())}>
 
            {(modalDisplayMode === 0) ? <Input.Group compact>
                <Input style={{ width: 'calc(100% - 200px)' }} placeholder={`Enter a synonym for ${typedWord}`} ref = {synonymRef}/>
